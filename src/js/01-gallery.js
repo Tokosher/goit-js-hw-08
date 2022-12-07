@@ -4,24 +4,14 @@ import { galleryItems } from './gallery-items';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-const wrappedImageElements = [];
-
-galleryItems.forEach(item => {
-  const linkElement = document.createElement('a');
-  linkElement.classList.add('gallery__item');
-  linkElement.href = item.original;
-
-  const previewImgElement = document.createElement('img');
-  previewImgElement.classList.add('gallery__image');
-  previewImgElement.src = item.preview;
-  previewImgElement.alt = item.description;
-  linkElement.insertAdjacentElement('afterbegin', previewImgElement);
-
-  wrappedImageElements.push(linkElement);
-})
+const wrappedImageHTMLElements = galleryItems.map(imageInfo => {
+  return `<a class="gallery__item" href="${imageInfo.original}">
+            <img class="gallery__image" src="${imageInfo.preview}" alt="${imageInfo.description}">
+         </a>`
+}).join('');
 
 const galleryArea = document.querySelector('.gallery');
-galleryArea.append(...wrappedImageElements);
+galleryArea.insertAdjacentHTML('afterbegin', wrappedImageHTMLElements);
 
 new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
